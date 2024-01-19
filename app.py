@@ -14,10 +14,10 @@ def image_matching(master_image, production_image):
 
     # Initialize ORB detector
     orb = cv2.ORB_create()
-
+    sift = cv2.SIFT_create()
     # Find the keypoints and descriptors with ORB
-    kp1, des1 = orb.detectAndCompute(master_gray, None)
-    kp2, des2 = orb.detectAndCompute(production_gray, None)
+    kp1, des1 = sift.detectAndCompute(master_gray, None)
+    kp2, des2 = sift.detectAndCompute(production_gray, None)
 
     # Create BFMatcher (Brute Force Matcher) object
     bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
