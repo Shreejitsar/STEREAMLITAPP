@@ -29,29 +29,32 @@ def image_matching(master_image, production_image):
     matches = sorted(matches, key=lambda x: x.distance)
 
     # Draw only good matches, set a threshold for matching accuracy
-    good_matches = [match for match in matches if match.distance < 50]
+    good_matches = [match for match in matches if match.distance <= 50]
+    bad_matches = [match for match in matches if match.distance > 50]
 
     # Draw matches
-    img_matches = cv2.drawMatches(master_gray, kp1, production_gray, kp2, good_matches, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
-
+    img_matches1 = cv2.drawMatches(master_gray, kp1, production_gray, kp2, good_matches, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+    img_matches2 = cv2.drawMatches(master_gray, kp1, production_gray, kp2, bad_matches, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
     # Calculate percentage of match
     total_matches = len(matches)
     good_matches_percentage = (len(good_matches) / total_matches) * 100
+    bad_matches_percentage = (len(bad_matches) / total_matches) * 100
 
-    return img_matches, good_matches_percentage
+    return img_matches1, good_matches_percentage,img_matches2,bad_matches_percentage
 
 def main():
-    st.title("Image Matching App")
+    st.title("CARPET MATCHING APP")
 
     master_image = st.file_uploader("Upload Master Image", type=["jpg", "jpeg", "png"])
     production_image = st.file_uploader("Upload Production Image", type=["jpg", "jpeg", "png"])
 
     if master_image and production_image:
         if st.button("Run"):
-            img_matches, good_matches_percentage = image_matching(master_image, production_image)
+            img_matches1,good_matches_percentage,img_matches2,bad_matches_percentage = image_matching(master_image, production_image)
 
             # Display the output using Streamlit
-            st.image(img_matches, caption=f'Good Matches Percentage: {good_matches_percentage:.2f}%', use_column_width=True)
+            st.image(img_matches1, caption=f'Good Matches Percentage: {good_matches_percentage:.2f}%', use_column_width=True)
+            st.image(img_matches2, caption=f'Bad Matches Percentage: {bad_matches_percentage:.2f}%', use_column_width=True)
 
 if __name__ == "__main__":
     main()
