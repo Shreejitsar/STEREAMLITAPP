@@ -29,8 +29,8 @@ def image_matching(master_image, production_image):
     matches = sorted(matches, key=lambda x: x.distance)
 
     # Draw only good matches, set a threshold for matching accuracy
-    good_matches = [match for match in matches if match.distance <= 50]
-    bad_matches = [match for match in matches if match.distance > 50]
+    good_matches = [match for match in matches if match.distance <= 75]
+    bad_matches = [match for match in matches if match.distance > 75]
 
     # Draw matches
     img_matches1 = cv2.drawMatches(master_gray, kp1, production_gray, kp2, good_matches, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
